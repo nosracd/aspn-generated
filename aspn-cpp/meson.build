@@ -4,6 +4,12 @@
 
 required = get_option('aspn-cpp').enabled()
 
+if (host_machine.system() == 'windows')
+    if meson.get_compiler('cpp').get_argument_syntax() == 'msvc'
+        add_project_arguments(['/bigobj', '/Zc:preprocessor', '-D_USE_MATH_DEFINES', '-DNOMINMAX'], language : 'cpp')
+    endif
+endif
+
 xtensor_dep = disabler()
 if not get_option('aspn-cpp-xtensor').disabled() or not get_option('aspn-cpp-xtensor-py').disabled()
     xtensor_dep = dependency('xtensor',
